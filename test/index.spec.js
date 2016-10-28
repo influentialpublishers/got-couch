@@ -52,3 +52,24 @@ test('::insert should store a document in the database and you ' +
   })
 
 )
+
+
+test('::create should store a document in the database with your ' +
+'provided identifier and then ::get should be able to retrieve your ' +
+'document by that identifier', t =>
+
+  couchdb.create(DB_NAME, 'my-foo', { boo: 'bah', moo: 'cow' })
+
+  .then((res) => t.is(res.body.id, 'my-foo'))
+
+  .then(() => couchdb.get(DB_NAME, 'my-foo'))
+
+  .then((res) => res.body)
+
+  .then((doc) => {
+
+    t.is(doc.boo, 'bah')
+    t.is(doc.moo, 'cow')
+
+  })
+)
