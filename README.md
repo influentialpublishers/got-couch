@@ -3,6 +3,9 @@
 # got-couch
 A got based couch driver/interface
 
+***NOTE:*** This driver is very incomplete, however, the goal is to support the all of 
+the CouchDB version 2 features and to cover the entire REST API.
+
 
 # Usage
 
