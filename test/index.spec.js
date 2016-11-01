@@ -1,5 +1,4 @@
-
-import R from 'ramda'
+/*eslint-env es6*/
 import test from 'ava'
 import CouchDbDriver from '../index.js'
 
@@ -72,4 +71,40 @@ test('::create should store a document in the database with your ' +
     t.is(doc.moo, 'Elsie')
 
   })
+)
+
+
+test('::list should list all of the documents in the ' +
+'in the database by default', t =>
+
+  Promise.all([
+
+    couchdb.create(DB_NAME, 'my-foo1', { test: 'Test', moo: 'Elsie' })
+  , couchdb.create(DB_NAME, 'my-foo2', { test: 'Test', moo: 'Clara' })
+
+  ])
+
+  .then(() => couchdb.list(DB_NAME, {}))
+
+  .then((res) => res.body)
+
+  .then((list) => {
+
+    const expected_count = 2
+
+    const expected_rows = [
+      { id: 'my-foo1', test: 'Test', moo: 'Elsie' }
+    , { id: 'my-foo2', test: 'Test', moo: 'Clara' }
+    ]
+
+    const actual_rows = list
+      .rows
+      .map((x) => ({ id: x.doc._id, test: x.doc.test, moo: x.doc.moo }))
+      .filter((x) => 'Test' === x.test )
+
+    t.is(actual_rows.length, expected_count, 'list count is not 2')
+    t.deepEqual(actual_rows, expected_rows, 'list not what I expected')
+
+  })
+
 )

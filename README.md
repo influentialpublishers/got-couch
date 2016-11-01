@@ -59,6 +59,12 @@ GotCouch(CONFIG).then((couchdb) => {
   // http://docs.couchdb.org/en/2.0.0/api/document/common.html#get--db-docid
   couchdb.get(DB_NAME, 'docid').then((response) => { /* ... */ })
 
+
+  // list all the documents in the given database.
+  // http://docs.couchdb.org/en/2.0.0/api/database/bulk-api.html#db-all-docs
+  couchdb.list(DB_NAME, {}).then((response) => { /* ... */ })
+
+
 })
 
 ```
