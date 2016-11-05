@@ -30,6 +30,9 @@
       "node": true
     }
   },
+  "engines": {
+    "node": ">=6.0.0"
+  },
   "dependencies": {
     "cookie": "^0.3.1",
     "debug": "^2.2.0",
