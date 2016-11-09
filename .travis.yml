@@ -5,7 +5,7 @@ node_js:
   - "node"
 
 services:
-  - couchdb
+  - docker
 
 before_install:
   # Repo for newer Node.js versions
@@ -15,6 +15,8 @@ before_install:
   - echo "deb http://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
   - sudo apt-get update -qq
   - sudo apt-get install -y -qq yarn
+  # Docker container for CouchDB 2.0
+  - docker run -d -p 5984:5984 klaemo/couchdb:2.0-dev --with-admin-party-please --with-haproxy -n 1
 
 cache:
   directories:
