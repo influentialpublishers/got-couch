@@ -16,7 +16,7 @@ before_install:
   - sudo apt-get update -qq
   - sudo apt-get install -y -qq yarn
   # Docker container for CouchDB 2.0
-  - docker run -it -d -p 5984:5984 klaemo/couchdb:2.0-dev --with-admin-party-please --with-haproxy -n 1
+  - docker run -it -d -p 5984:5984 klaemo/couchdb:2.0-dev tini -- /usr/src/couchdb/dev/run  --with-admin-party-please --with-haproxy -n 1
 
 cache:
   directories:
