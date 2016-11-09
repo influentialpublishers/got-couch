@@ -1,5 +1,7 @@
 [![Build Status](https://travis-ci.org/influentialpublishers/got-couch.svg?branch=master)](https://travis-ci.org/influentialpublishers/got-couch)
 
+***NOTE:*** Builds will fail until travis-ci provides couchdb v2.0+
+
 # got-couch
 A got based couch driver/interface
 
