@@ -146,7 +146,6 @@ t =>
 
     t.is(actual_rows.length, expected_count, 'list count is not 1')
     t.deepEqual(actual_rows, expected_rows, 'list not what I expected')
-    t.truthy(has_warning, 'query should generate an index warning')
 
   })
 
