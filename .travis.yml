@@ -24,7 +24,9 @@ cache:
 
 before_script:
   - curl -X PUT localhost:5984/got_couch_test
-  - curl -X PUT localhost:5984/_config/admins/root -d '"password"'
+  - curl -X GET localhost:5984/_membership
+  # https://github.com/klaemo/docker-couchdb/issues/42#issuecomment-169610897
+  - curl -X PUT localhost:5984/_node/couchdb@localhost/_config/admins/root -d '"password"'
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
