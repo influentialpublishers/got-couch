@@ -9,6 +9,7 @@ const CONFIG  = {
 }
 let couchdb   = null
 
+let rev_id = ''
 
 test.before(() =>
   CouchDbDriver(CONFIG).then((driver) => { couchdb = driver })
@@ -69,6 +70,40 @@ test('::create should store a document in the database with your ' +
 
     t.is(doc.boo, 'Casper')
     t.is(doc.moo, 'Elsie')
+
+  })
+)
+
+
+test('::upsert without a rev_id should store a document in the database ' +
+' and with rev_id should update the existing document', t =>
+
+  couchdb.upsert(DB_NAME, 'my-boo', null, { boo: 'Casper', moo: 'Troy'})
+
+  .then((res) => t.is(res.body.id, 'my-boo'))
+
+  .then(() => couchdb.get(DB_NAME, 'my-boo'))
+
+  .then((res) => {
+
+    rev_id = res.body._rev
+
+    t.is(res.body.boo, 'Casper')
+    t.is(res.body.moo, 'Troy')
+
+  })
+
+  .then(() => couchdb.upsert(DB_NAME, 'my-boo', rev_id,
+    { koo: 'Bob', moo: 'Troy'})
+  )
+
+  .then(() => couchdb.get(DB_NAME, 'my-boo'))
+
+  .then((res) => {
+
+    t.is(res.body.moo, 'Troy')
+    t.is(res.body.koo, 'Bob')
+    t.is(res.body.boo, undefined)
 
   })
 )
