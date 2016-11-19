@@ -22,7 +22,7 @@ cache:
   directories:
     - $HOME/.yarn-cache
 
-before_script:
+after_install:
   - curl -X PUT localhost:5984/got_couch_test
   - curl -X GET localhost:5984/_membership
   # https://github.com/klaemo/docker-couchdb/issues/42#issuecomment-169610897
