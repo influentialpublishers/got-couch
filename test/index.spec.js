@@ -2,6 +2,7 @@
 import test from 'ava'
 import CouchDbDriver from '../index.js'
 
+const R = require('ramda')
 const DB_NAME = 'couch-driver-test'
 const CONFIG  = {
   usename: 'root'
@@ -74,7 +75,7 @@ test('::create should store a document in the database with your ' +
 )
 
 
-test.only('::bulk_upsert should update a list of documents in the database ' +
+test('::bulk_upsert should update a list of documents in the database ' +
 'based on the _id and _rev keys. If these two keys don\'t exist, create ' +
 'the documents in the database', t =>
 
@@ -83,10 +84,13 @@ test.only('::bulk_upsert should update a list of documents in the database ' +
   .then((res) =>
 
     couchdb.bulk_upsert(DB_NAME, [
-
-      { _id : res.body.id, _rev: res.body.rev, first: 'matt', last: 'chuang' }
-    , { _id : '2', first: 'jon', last: 'lee' }
-
+      { _id   : res.body.id
+      , _rev  : res.body.rev
+      , first : 'matt'
+      , last  : 'chuang'
+      , test  : 'bulk_upsert'
+      }
+    , { _id   : '2', first: 'jon', last: 'lee', test: 'bulk_upsert' }
     ])
   )
 
@@ -97,12 +101,14 @@ test.only('::bulk_upsert should update a list of documents in the database ' +
   .then((list) => {
 
     const expected_count = 2
-
-    t.is(expected_count, list.rows.length)
-
     const map = {}
-    list.rows.forEach((x) => { map[x.id] = x.doc })
 
+    R.compose(
+      R.forEach((x) => { map[x.id] = x.doc })
+    , R.filter((x) => 'bulk_upsert' === x.doc.test)
+    )(list.rows)
+
+    t.is(expected_count, Object.keys(map).length)
     t.is(map['1'].last, 'chuang')
     t.is(map['2'].last, 'lee')
 
