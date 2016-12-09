@@ -74,7 +74,7 @@ test('::create should store a document in the database with your ' +
 )
 
 
-test('::list should list all of the documents in the ' +
+test('::list should list all of the documents ' +
 'in the database by default', t =>
 
   Promise.all([
@@ -194,6 +194,34 @@ test('::addIndex should create an index that is used when a query is ' +
     t.is(actual_rows.length, expected_count, 'list count is not 1')
     t.deepEqual(actual_rows, expected_rows, 'list not what I expected')
     t.falsy(has_warning, 'query generated an unexpected warning message')
+
+  })
+
+)
+
+
+test('::del should delete a document with a given identifier from ' +
+' the database.', t =>
+
+  couchdb.insert(DB_NAME, { foo: 'bar2', baz: 'buzz2' })
+
+  .then((result) => result.body.id)
+
+  .then(couchdb.get(DB_NAME))
+
+  .then((result) => couchdb.del(DB_NAME, result.body._id, result.body._rev))
+
+  .then(() => couchdb.query(DB_NAME, {
+    selector: { foo: 'bar2', baz: 'buzz2' }
+  }, {}))
+
+  .then((result) => result.body.docs)
+
+  .then((docs) => {
+
+    const expected_count = 0
+
+    t.is(docs.length, expected_count, 'list count is not 0')
 
   })
 
