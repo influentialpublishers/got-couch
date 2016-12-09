@@ -2,6 +2,7 @@
 import test from 'ava'
 import CouchDbDriver from '../index.js'
 
+const R = require('ramda')
 const DB_NAME = 'couch-driver-test'
 const CONFIG  = {
   usename: 'root'
@@ -74,7 +75,48 @@ test('::create should store a document in the database with your ' +
 )
 
 
-test('::list should list all of the documents ' +
+test('::bulk_upsert should update a list of documents in the database ' +
+'based on the _id and _rev keys. If these two keys don\'t exist, create ' +
+'the documents in the database', t =>
+
+  couchdb.create(DB_NAME, '1', { first: 'matt', last: 'c' })
+
+  .then((res) =>
+
+    couchdb.bulk_upsert(DB_NAME, [
+      { _id   : res.body.id
+      , _rev  : res.body.rev
+      , first : 'matt'
+      , last  : 'chuang'
+      , test  : 'bulk_upsert'
+      }
+    , { _id   : '2', first: 'jon', last: 'lee', test: 'bulk_upsert' }
+    ])
+  )
+
+  .then(() => couchdb.list(DB_NAME, {}))
+
+  .then((res) => res.body)
+
+  .then((list) => {
+
+    const expected_count = 2
+    const map = {}
+
+    R.compose(
+      R.forEach((x) => { map[x.id] = x.doc })
+    , R.filter((x) => 'bulk_upsert' === x.doc.test)
+    )(list.rows)
+
+    t.is(expected_count, Object.keys(map).length)
+    t.is(map['1'].last, 'chuang')
+    t.is(map['2'].last, 'lee')
+
+  })
+)
+
+
+test('::list should list all of the documents in the ' +
 'in the database by default', t =>
 
   Promise.all([
@@ -141,8 +183,6 @@ t =>
       .body
       .docs
       .map((x) => ({ id: x._id, test: x.test, moo: x.moo }))
-
-    const has_warning = result.body.warning
 
     t.is(actual_rows.length, expected_count, 'list count is not 1')
     t.deepEqual(actual_rows, expected_rows, 'list not what I expected')
