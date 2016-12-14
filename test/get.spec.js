@@ -30,7 +30,7 @@ test('::create should store a document in the database with your ' +
 
   })
   .catch((err) => {
-    console.log(err)
+    console.log("GET: ", err)
     return err
   })
 )

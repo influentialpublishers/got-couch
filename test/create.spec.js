@@ -12,14 +12,13 @@ test('db::info should return information about the test that was ' +
 'created using db::create', t =>
 
   couchdb.then((connection) => {
-
     connection.db.info(DB_NAME)
 
     .then((info) => t.is(info.body.db_name, DB_NAME))
 
   })
   .catch((err) => {
-    console.log(err)
+    console.log("CREATE: ", err)
     return err
   })
 )

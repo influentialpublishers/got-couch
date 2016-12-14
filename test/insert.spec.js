@@ -27,7 +27,7 @@ test('::insert should store a document in the database and you ' +
 
   })
   .catch((err) => {
-    console.log(err)
+    console.log("INSERT: ", err)
     return err
   })
 )

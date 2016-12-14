@@ -5,7 +5,7 @@ install:
 	yarn install
 
 test: install
-	${NODE_BIN}/ava test
+	${NODE_BIN}/ava --verbose test
 
 
 .PHONY: test

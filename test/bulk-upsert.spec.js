@@ -52,7 +52,7 @@ test('::bulk_upsert should update a list of documents in the database ' +
 
     })
     .catch((err) => {
-      console.log(err)
+      console.log("BULK UPSERT: ", err)
       return err
     })
 )

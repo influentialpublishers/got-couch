@@ -17,7 +17,9 @@ test('::del should delete a document with a given identifier from ' +
 
     .then((result) => connection.get(DB_NAME, result.body.id))
 
-    .then((result) => connection.del(DB_NAME, result.body._id, result.body._rev))
+    .then((result) => connection.del(
+      DB_NAME, result.body._id, result.body._rev
+    ))
 
     .then(() => connection.query(DB_NAME, {
       selector: { foo: 'bar2', baz: 'buzz2' }
@@ -33,7 +35,7 @@ test('::del should delete a document with a given identifier from ' +
 
   })
   .catch((err) => {
-    console.log(err)
+    console.log("DELETE: ", err)
     return err
   })
 )

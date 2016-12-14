@@ -1,4 +1,6 @@
 /*eslint-env es6*/
+const Bluebird                  = require('bluebird')
+
 const CONFIG                    = require('./_config.js')
 const { initCouchDb, initTest } = require('./_test-base.js')
 
@@ -13,7 +15,7 @@ t =>
 
   couchdb.then((connection) => {
 
-    Promise.all([
+    Bluebird.all([
       connection.create(DB_NAME, 'find-foo1', { test: 'FIND', moo: 'Elsie' })
     , connection.create(DB_NAME, 'find-foo2', { test: 'FIND', moo: 'Clara' })
     , connection.create(DB_NAME, 'find-foo3', { test: 'FIND', moo: 'Bessie' })
@@ -46,7 +48,7 @@ t =>
 
   })
   .catch((err) => {
-    console.log(err)
+    console.log("FIND: ", err)
     return err
   })
 )
