@@ -1,16 +1,19 @@
 /*eslint-env es6*/
 const Bluebird                  = require('bluebird')
+const debug                     = require('debug')('got-couch')
 
 const CONFIG                    = require('./_config.js')
 const { initCouchDb, initTest } = require('./_test-base.js')
 
 const DB_NAME = 'couch-add-index-test'
 
+const CREATED = 201
+
 const couchdb = initCouchDb(CONFIG)
 const test    = initTest(couchdb, DB_NAME)
 
 
-test('::addIndex should create an index that is used when a query is ' +
+test.serial('::addIndex should create an index that is used when a query is ' +
 'executed by the ::query (find) function', t =>
 
   couchdb.then((connection) => {
@@ -25,13 +28,29 @@ test('::addIndex should create an index that is used when a query is ' +
 
     .then(() => connection.ensureFullCommit(DB_NAME))
 
+    .tap ((response) => {
+      t.is(
+        CREATED, response.statusCode,
+        'ensure documents created for index test'
+      )
+    })
+
     .then(() => connection.addIndex(DB_NAME, {
       index: { fields: ["test", "moo"] }
     , name: "test-moo-index"
     }, {}))
 
-    .tap((response) => {
+    .tap ((response) => {
       index = response.body
+    })
+
+    .then(() => connection.ensureFullCommit(DB_NAME))
+
+    .tap ((response) => {
+      t.is(
+        CREATED, response.statusCode,
+        'ensure full commit after index create is 201'
+      )
     })
 
     .then(() => connection.query(DB_NAME, {
@@ -68,11 +87,15 @@ test('::addIndex should create an index that is used when a query is ' +
     .then((result) => {
       t.is(result.ok, true, "deleting index failed miserably")
     })
+    .catch((err) => {
+      t.fail(err)
+    })
 
   })
   .catch((err) => {
-    console.log("ADD INDEX: ", err)
-    return err
+    debug("ADD INDEX: %o", err)
+    t.fail(err)
+    throw err
   })
 
 )

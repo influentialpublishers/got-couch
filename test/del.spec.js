@@ -1,4 +1,5 @@
 /*eslint-env es6*/
+const debug                     = require('debug')('got-couch')
 const CONFIG                    = require('./_config.js')
 const { initCouchDb, initTest } = require('./_test-base.js')
 
@@ -32,10 +33,14 @@ test('::del should delete a document with a given identifier from ' +
       t.is(result.body.docs.length, expected_count, 'list count is not 0')
 
     })
+    .catch((err) => {
+      t.fail(err)
+    })
 
   })
   .catch((err) => {
-    console.log("DELETE: ", err)
-    return err
+    debug("DELETE: %o", err)
+    t.fail(err)
+    throw err
   })
 )

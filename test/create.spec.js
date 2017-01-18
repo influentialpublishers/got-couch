@@ -1,4 +1,5 @@
 /*eslint-env es6*/
+const debug                     = require('debug')('got-couch')
 const CONFIG                    = require('./_config.js')
 const { initCouchDb, initTest } = require('./_test-base.js')
 
@@ -16,9 +17,12 @@ test('db::info should return information about the test that was ' +
 
     .then((info) => t.is(info.body.db_name, DB_NAME))
 
+    .catch ((err) => t.fail(err))
+
   })
   .catch((err) => {
-    console.log("CREATE: ", err)
-    return err
+    debug("CREATE: %o", err)
+    t.fail(err)
+    throw err
   })
 )

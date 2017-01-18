@@ -1,5 +1,7 @@
 /*eslint-env es6*/
 const R                         = require('ramda')
+const debug                     = require('debug')('got-couch')
+
 const CONFIG                    = require('./_config.js')
 const { initCouchDb, initTest } = require('./_test-base.js')
 
@@ -49,10 +51,14 @@ test('::bulk_upsert should update a list of documents in the database ' +
         t.is(map['2'].last, 'lee')
 
       })
+      .catch((err) => {
+        t.fail(err)
+      })
 
     })
     .catch((err) => {
-      console.log("BULK UPSERT: ", err)
-      return err
+      debug("BULK UPSERT: %o", err)
+      t.fail(err)
+      throw err
     })
 )

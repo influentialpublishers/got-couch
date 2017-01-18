@@ -1,5 +1,6 @@
 /*eslint-env es6*/
 const Bluebird                  = require('bluebird')
+const debug                     = require('debug')('got-couch')
 
 const CONFIG                    = require('./_config.js')
 const { initCouchDb, initTest } = require('./_test-base.js')
@@ -44,9 +45,13 @@ test('::list should list all of the documents in the ' +
       t.deepEqual(actual_rows, expected_rows, 'list not what I expected')
 
     })
+    .catch((err) => {
+      t.fail(err)
+    })
 
   }).catch((err) => {
-    console.log("LIST: ", err)
-    return err
+    debug("LIST: %o", err)
+    t.fail(err)
+    throw err
   })
 )

@@ -1,5 +1,6 @@
 /*eslint-env es6*/
 const Bluebird                  = require('bluebird')
+const debug                     = require('debug')('got-couch')
 
 const CONFIG                    = require('./_config.js')
 const { initCouchDb, initTest } = require('./_test-base.js')
@@ -45,10 +46,14 @@ t =>
       t.deepEqual(actual_rows, expected_rows, 'list not what I expected')
 
     })
+    .catch((err) => {
+      t.fail(err)
+    })
 
   })
   .catch((err) => {
-    console.log("FIND: ", err)
-    return err
+    debug("FIND: %o", err)
+    t.fail(err)
+    throw err
   })
 )
