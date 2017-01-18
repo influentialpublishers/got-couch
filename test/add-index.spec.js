@@ -13,7 +13,7 @@ const couchdb = initCouchDb(CONFIG)
 const test    = initTest(couchdb, DB_NAME)
 
 
-test.serial('::addIndex should create an index that is used when a query is ' +
+test('::addIndex should create an index that is used when a query is ' +
 'executed by the ::query (find) function', t =>
 
   couchdb.then((connection) => {

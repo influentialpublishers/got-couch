@@ -1,11 +1,10 @@
 /*eslint-env es6*/
-const test = require('ava')
+const test  = require('ava')
+const debug = require('debug')('got-couch')
 
-/*
 process.on('unhandledRejection', (reason, p) => {
   debug("Unhandled Rejected: %o", reason)
 })
-*/
 
 const CouchDbDriver = require('../index.js')
 
