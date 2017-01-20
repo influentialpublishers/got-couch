@@ -65,10 +65,12 @@ test('::addIndex should create an index that is used when a query is ' +
         { id: 'index4', test: 'INDEX', moo: 'Babe' }
       ]
 
+      const _rowMap = (x) => ({ id: x._id, test: x.test, moo: x.moo })
+
       const actual_rows = result
         .body
         .docs
-        .map((x) => ({ id: x._id, test: x.test, moo: x.moo }))
+        .map(_rowMap)
 
       const has_warning = result.body.hasOwnProperty('warning')
 
