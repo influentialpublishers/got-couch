@@ -34,6 +34,7 @@
     "node": ">=6.0.0"
   },
   "dependencies": {
+    "bluebird": "^3.4.6",
     "cookie": "^0.3.1",
     "debug": "^2.2.0",
     "got": "^6.5.0",
@@ -41,7 +42,6 @@
   },
   "devDependencies": {
     "ava": "^0.17.0",
-    "bluebird": "^3.4.6",
     "eslint": "^3.8.1",
     "eslint-config-influential": "^1.1.0",
     "nconf": "^0.8.4"
