@@ -1,5 +1,9 @@
 /*eslint-env es6*/
-const CONFIG                    = require('./_config.js')
+const Bluebird                  = require('bluebird')
+const debug                     = require('debug')('got-couch')
+
+const CONFIG                    = require('./config/_index.js')
+
 const { initCouchDb, initTest } = require('./_test-base.js')
 
 const DB_NAME = 'couch-list-test'
@@ -13,7 +17,7 @@ test('::list should list all of the documents in the ' +
 
   couchdb.then((connection) => {
 
-    Promise.all([
+    Bluebird.all([
 
       connection.create(DB_NAME, 'my-foo1', { test: 'Test', moo: 'Elsie' })
     , connection.create(DB_NAME, 'my-foo2', { test: 'Test', moo: 'Clara' })
@@ -42,9 +46,13 @@ test('::list should list all of the documents in the ' +
       t.deepEqual(actual_rows, expected_rows, 'list not what I expected')
 
     })
+    .catch((err) => {
+      t.fail(err)
+    })
 
   }).catch((err) => {
-    console.log(err)
-    return err
+    debug("LIST: %o", err)
+    t.fail(err)
+    throw err
   })
 )

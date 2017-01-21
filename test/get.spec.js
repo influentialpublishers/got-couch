@@ -1,5 +1,7 @@
 /*eslint-env es6*/
-const CONFIG                    = require('./_config.js')
+const debug                     = require('debug')('got-couch')
+
+const CONFIG                    = require('./config/_index.js')
 const { initCouchDb, initTest } = require('./_test-base.js')
 
 const DB_NAME = 'couch-get-test'
@@ -27,10 +29,13 @@ test('::create should store a document in the database with your ' +
       t.is(doc.moo, 'Elsie')
 
     })
-
+    .catch((err) => {
+      t.fail(err)
+    })
   })
   .catch((err) => {
-    console.log(err)
-    return err
+    debug("GET: %o", err)
+    t.fail(err)
+    throw err
   })
 )

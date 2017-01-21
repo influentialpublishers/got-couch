@@ -1,5 +1,6 @@
 /*eslint-env es6*/
-const CONFIG                    = require('./_config.js')
+const debug                     = require('debug')('got-couch')
+const CONFIG                    = require('./config/_index.js')
 const { initCouchDb, initTest } = require('./_test-base.js')
 
 const DB_NAME = 'couch-del-test'
@@ -17,7 +18,9 @@ test('::del should delete a document with a given identifier from ' +
 
     .then((result) => connection.get(DB_NAME, result.body.id))
 
-    .then((result) => connection.del(DB_NAME, result.body._id, result.body._rev))
+    .then((result) => connection.del(
+      DB_NAME, result.body._id, result.body._rev
+    ))
 
     .then(() => connection.query(DB_NAME, {
       selector: { foo: 'bar2', baz: 'buzz2' }
@@ -30,10 +33,14 @@ test('::del should delete a document with a given identifier from ' +
       t.is(result.body.docs.length, expected_count, 'list count is not 0')
 
     })
+    .catch((err) => {
+      t.fail(err)
+    })
 
   })
   .catch((err) => {
-    console.log(err)
-    return err
+    debug("DELETE: %o", err)
+    t.fail(err)
+    throw err
   })
 )
