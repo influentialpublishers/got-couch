@@ -2,7 +2,7 @@
 const R                         = require('ramda')
 const debug                     = require('debug')('got-couch')
 
-const CONFIG                    = require('./_config.js')
+const CONFIG                    = require('./config/_index.js')
 const { initCouchDb, initTest } = require('./_test-base.js')
 
 const DB_NAME = 'couch-bulk-upsert-test'

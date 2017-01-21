@@ -43,7 +43,8 @@
     "ava": "^0.17.0",
     "bluebird": "^3.4.6",
     "eslint": "^3.8.1",
-    "eslint-config-influential": "^1.1.0"
+    "eslint-config-influential": "^1.1.0",
+    "nconf": "^0.8.4"
   },
   "ava": {
     "verbose": true

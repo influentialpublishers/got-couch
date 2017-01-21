@@ -39,3 +39,6 @@ jspm_packages
 # VIM files
 *.swp
 *.swo
+
+# Environment Specific
+_environment.json
